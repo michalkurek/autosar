@@ -26,4 +26,4 @@ The Python API and its documentation are currently being reworked in the feature
 
 Update
 -------------
-Check: autosar\examples\autosar4\create_swc_ports_behaviors.py how to create SWC, ports, timerevent, etc and eventually generate source code out of it. Have fun!
+Check: https://github.com/michalkurek/autosar/blob/as4/examples/autosar4/create_swc_ports_behaviors.py how to create SWC, ports, timerevent, etc and eventually generate source code out of it. Have fun!
