@@ -265,9 +265,9 @@ class XMLComponentTypeWriter(ElementWriter):
                     if elem is None:
                         raise ValueError("%s: Invalid data element name '%s'"%(port.ref,comspec.name))
                     if elem.isQueued:
-                        lines.extend(self.indent(self,_writeQueuedSenderComSpecXML(ws, port, comspec, elem), 2))
+                        lines.extend(self.indent(self,_writeQueuedSenderComSpecXML(ws,  comspec, elem), 2))
                     else:
-                        lines.extend(self.indent(self._writeUnqueuedSenderComSpecXML(ws, port, comspec, elem),2))
+                        lines.extend(self.indent(self._writeUnqueuedSenderComSpecXML(ws,  comspec, elem),2))
                 elif isinstance(comspec, autosar.component.OperationComSpec):
                     operation=portInterface.find(comspec.name)
                     if operation is None:

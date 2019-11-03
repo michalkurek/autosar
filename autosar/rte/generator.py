@@ -66,6 +66,8 @@ class TypeGenerator:
                if isinstance(dataType,autosar.datatype.BooleanDataType):
                   typedef = C.typedef('boolean', dataType.name)
                   hfile.code.append(C.statement(typedef))
+               elif isinstance(dataType,autosar.datatype.ImplementationDataType):
+                  pass
                elif isinstance(dataType,autosar.datatype.IntegerDataType):
                   valrange = dataType.maxVal-dataType.minVal
                   bitcount = valrange.bit_length()
@@ -380,7 +382,7 @@ class RteGenerator:
    def _genGet(self, fp, prototypes):
       for port_func in prototypes:
          body = C.block(innerIndent=innerIndentDefault)
-         prefix = '&' if port_func.data_element.dataType.isComplexType else ''
+         prefix = '' #'&' if port_func.data_element.dataType.isComplexType else ''
          suffix = '[0]' if isinstance(port_func.data_element.dataType, autosar.datatype.ArrayDataType) else ''
          body.code.append(C.statement('return %s%s%s'%(prefix, port_func.data_element.symbol, suffix)))
          fp.write(str(port_func.proto)+'\n')
@@ -491,7 +493,12 @@ class ComponentHeaderGenerator():
                      #in case the ref is pointing to a Constant (the parent), grab the child instance using .value
                      initValue=initValue.value
                   if initValue is not None:
-                     dataType = ws.find(initValue.typeRef)
+                     if hasattr(initValue,'typeRef'):
+                        dataType = ws.find(initValue.typeRef)
+                     elif hasattr(initValue,'ref'):
+                        dataType = ws.find(initValue.ref)
+                     else:
+                        dataType = None
                      if dataType is not None:
                         prefix = 'Rte_InitValue_%s_%s'%(port.name, comspec.name)
                         code.extend(self._getInitValue(ws, prefix, initValue, dataType))
@@ -524,6 +531,9 @@ class ComponentHeaderGenerator():
                code.extend(self._getInitValue(ws, prefix, element, dataType))
       elif isinstance(value, autosar.constant.ArrayValue):
          pass
+      elif isinstance(value, autosar.constant.NumericalValue):
+         suffix='u'
+         code.append(C.define(def_name,'((%s)%s%s)'%(dataType.name, value.value,suffix)))         
       else:
          raise NotImplementedError(type(value))
       return code
@@ -566,7 +576,7 @@ class MockRteGenerator(RteGenerator):
       data_type = data_element.dataType
       func_name='%s_GetWriteData_%s_%s_%s'%(self.prefix, component.name, port.name, data_element.name)
       short_name='%s_GetWriteData_%s_%s'%(self.prefix, port.name, data_element.name)
-      suffix = '*' if data_type.isComplexType else ''
+      suffix = '' #'*' if data_type.isComplexType else ''
       proto=C.function(func_name, data_type.name+suffix)
       rte_func = autosar.rte.base.DataElementFunction(proto, port, data_element)
       #self._createPortVariable(component, port, data_element)

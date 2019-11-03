@@ -115,7 +115,7 @@ class ProvidePort(Port):
       else:
          call_type='Write'
       data_type = rte_data_element.dataType
-      pointer=True if data_type.isComplexType else False
+      pointer= False #True if data_type.isComplexType else False
       fname='_'.join([self.parent.rte_prefix, call_type, self.parent.name, self.name, rte_data_element.name])
       shortname='_'.join([self.parent.rte_prefix, call_type, self.name, rte_data_element.name])
       type_arg=type2arg(data_type,pointer)
@@ -228,7 +228,7 @@ class RteTypeManager:
       for dataType in self.typeMap.values():
          if isinstance(dataType, autosar.datatype.RecordDataType) or isinstance(dataType, autosar.datatype.ArrayDataType):
             complexTypes.add(dataType.ref)
-         elif isinstance(dataType, autosar.portinterface.ModeDeclarationGroup):
+         elif hasattr(autosar.portinterface,'ModeDeclarationGroup') and isinstance(dataType, autosar.portinterface.ModeDeclarationGroup):
             modeTypes.add(dataType.ref)
          else:
             basicTypes.add(dataType.ref)
@@ -291,7 +291,7 @@ class SetReadDataFunction:
       func_name='%s_SetReadData_%s_%s_%s'%(prefix, component.name, port.name, data_element.name)
       shortname='%s_SetReadData_%s_%s'%(prefix, port.name, data_element.name)
       proto=C.function(func_name, 'void')
-      proto.add_arg(C.variable('data', data_type.name, pointer=data_type.isComplexType))
+      proto.add_arg(C.variable('data', data_type.name)) # , pointer=data_type.isComplexType))
       self.shortname = shortname
       self.data_element = data_element
       self.proto=proto

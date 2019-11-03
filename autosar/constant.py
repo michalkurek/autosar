@@ -1,10 +1,13 @@
 from autosar.element import Element
+import autosar.constant
 
 def initializer_string(constant):
     if constant is None:
         return ''
     elif isinstance(constant, IntegerValue):
         return '%d'%(int(constant.value))
+    elif isinstance(constant, autosar.constant.Constant):
+        return '%d'%(int(constant.value.value))
     elif isinstance(constant, RecordValue):
         prolog = '{'
         epilog = '}'
