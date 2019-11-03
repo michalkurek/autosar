@@ -24,12 +24,6 @@ Documentation
 
 The Python API and its documentation are currently being reworked in the feature/ar4_api branch. You can find an early preview `here <http://autosar.readthedocs.io/en/latest/>`_.
 
-Upcoming Releases
------------------
-
-autosar 0.3.6
-~~~~~~~~~~~~~~
-
-* New data type API (AUTOSAR4)
-* Documentation overhaul (AUTOSAR4)
-* Comprehensive unit tests (AUTOSAR3, AUTOSAR4)
+Update
+-------------
+Check: autosar\examples\autosar4\create_swc_ports_behaviors.py how to create SWC, ports, timerevent, etc and eventually generate source code out of it. Have fun!
